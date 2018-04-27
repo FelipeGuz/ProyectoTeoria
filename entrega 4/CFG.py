@@ -10,16 +10,24 @@ class CFG(object):
 
 
     def test(self,word):
+        contador = 0
         possible_state = []
+        possible_stateTemp = []
         for i in word:
             temp_rule = []
-            for state in self.rules.keys():
-                for eleState in self.rules[(state)]:
-                    lista = list(self.rules[(state)])
-                    if(i in lista):
-                        temp_rule.append(state)
-            possible_state+=[set(temp_rule)]
-        return possible_state
+            if(contador==0):
+                for key in self.rules.keys():
+                    for eleState in self.rules[(key)]:
+                        lista = list(self.rules[(key)])
+                        if(i in lista):
+                            temp_rule.append(key)
+                possible_stateTemp+=[set(temp_rule)]
+                contador+=1
+            elif(contador!=0 and contador<len(word)):
+                for elem in possible_stateTemp:
+                    
+            possible_state +=possible_stateTemp 
+            
             
 
 
@@ -47,6 +55,7 @@ class CFG(object):
 ##            X[i][i] = list(set(X[i][i]))
 ##            
 ##        for i in range(l-1):
+##            print "Lista: ",X
 ##            for var1 in X[i][i]:
 ##                for var2 in X[i+1][i+1]:
 ##                    for var in self.rules.keys():
