@@ -12,21 +12,24 @@ class CFG(object):
     def test(self,word):
         contador = 0
         possible_state = []
-        possible_stateTemp = []
+        dicti = {}
         for i in word:
             temp_rule = []
-            if(contador==0):
-                for key in self.rules.keys():
-                    for eleState in self.rules[(key)]:
-                        lista = list(self.rules[(key)])
-                        if(i in lista):
-                            temp_rule.append(key)
-                possible_stateTemp+=[set(temp_rule)]
-                contador+=1
-            elif(contador!=0 and contador<len(word)):
-                for elem in possible_stateTemp:
-                    
-            possible_state +=possible_stateTemp 
+            for key in self.rules.keys():
+                for eleState in self.rules[(key)]:
+                    lista = list(self.rules[(key)])
+                    if(i in lista):
+                        temp_rule.append(key)
+            dicti[1,contador+1] = set(temp_rule)
+            possible_state+=[set(temp_rule)]
+            contador+=1
+
+        contador = 2
+        while(contador!=len(word)):
+            temp_rule = []
+            
+            
+        return dicti
             
             
 
