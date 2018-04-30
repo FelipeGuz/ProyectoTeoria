@@ -11,8 +11,8 @@ class CFG(object):
 
     def test(self,word):
         contador = 0
-        possible_state = []
-        dicti = {}
+        states = []
+        dicc = {}
         for i in word:
             temp_rule = []
             for key in self.rules.keys():
@@ -20,16 +20,22 @@ class CFG(object):
                     lista = list(self.rules[(key)])
                     if(i in lista):
                         temp_rule.append(key)
-            dicti[1,contador+1] = set(temp_rule)
-            possible_state+=[set(temp_rule)]
+            dicc[contador+1,contador+1] = list(set(temp_rule))
             contador+=1
 
-        contador = 2
-        while(contador!=len(word)):
-            temp_rule = []
+        fila = 2
+        columna = 1
+        while(fila!=len(word)):
+            for i in range(1,len(dicc)+1):
+                states+=[dicc[(columna,i)]]
+            
+            dicc = {}
+            
+                
+        
             
             
-        return dicti
+        #return dicc
             
             
 
@@ -40,6 +46,7 @@ class CFG(object):
 ####################################################################################################################################################
             
 ##    def test(self, word):
+##        contador = 1
 ##        l = len(word)
 ##        #Inicializar la matriz
 ##        X = []
@@ -56,17 +63,17 @@ class CFG(object):
 ##                    if rule == word[i]:
 ##                        X[i][i].append(var)
 ##            X[i][i] = list(set(X[i][i]))
-##            
-##        for i in range(l-1):
-##            print "Lista: ",X
-##            for var1 in X[i][i]:
-##                for var2 in X[i+1][i+1]:
-##                    for var in self.rules.keys():
-##                        for rule in self.rules[var]:
-##                            if rule == var1+var2:
-##                                X[i][i+1].append(var)           
-##            X[i][i+1] = list(set(X[i][i+1]))
 ##
+##        while(contador!=len(word)):
+##            for i in range(l-contador):
+##                for var1 in X[i][i]:
+##                    for var2 in X[i+1][i+1]:
+##                        for var in self.rules.keys():
+##                            for rule in self.rules[var]:
+##                                if rule == var1+var2:
+##                                    X[i][i+1].append(var)           
+##                X[i][i+1] = list(set(X[i][i+1]))
+##            contador+=1
 ##        print 'Primera fila:' 
 ##        for i in range(l):
 ##            print X[i][i]         
