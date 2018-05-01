@@ -17,19 +17,54 @@ class CFG(object):
             temp_rule = []
             for key in self.rules.keys():
                 for eleState in self.rules[(key)]:
-                    lista = list(self.rules[(key)])
+                    lista = self.rules[(key)]
                     if(i in lista):
                         temp_rule.append(key)
-            dicc[contador+1,contador+1] = list(set(temp_rule))
+            print "Temp_rule: ",temp_rule
+            dicc[contador+1,contador+1] = list(sorted(set(temp_rule)))
+            states.append([[contador+1,contador+1],dicc[contador+1,contador+1]])
+            print "Diccionario: ",dicc
             contador+=1
 
         fila = 2
+        
         columna = 1
-        while(fila!=len(word)):
-            for i in range(1,len(dicc)+1):
-                states+=[dicc[(columna,i)]]
+        elemento = 2
+        pre_states = []
+        pre_states+=states
+        print "---->ESTADOS: ",states
+        print "---------------------------------------------------------------------------------------------"
+        def filasM2(fila,columna,elemento,states,pre_states,word,rules):
+            print "Columna: ",columna
+            print "Elemento: ",elemento
+            if(elemento==len(word)+1):
+                print "---------------------------------------"
+                print "Pre_states: ",pre_states
+                return states
+            else:
+                eva_temp = [] #evaluaciones entre elementos del triangulo (Ej: q11 con q22)
+                combinacion = [] #combinaciones distrivutiva de los elementos de eva_temp
+                #Buscar elementos para eva_temp
+                for i in states:
+                    if(i[0][0]==columna or i[0][1]==elemento):
+                        eva_temp+=[i[1]]
+                print "Eva_temp es: ",eva_temp
+                #Hacer las combinaciones
+                for i in eva_temp[0]:
+                    print i
+                    for u in eva_temp[1]:
+                        print u
+                        for node in rules:
+                            if((i+u) in rules.get(node) and not(node in combinacion)):
+                                combinacion.append(node)
+                print "Combinacion: ",combinacion
+                print combinacion
+                pre_states.append([[columna,elemento],combinacion])
+                filasM2(fila,columna+1,elemento+1,states,pre_states,word,self.rules)
+        filasM2(fila,columna,elemento,states,pre_states,word,self.rules)
+                        
             
-            dicc = {}
+            
             
                 
         
