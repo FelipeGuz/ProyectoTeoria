@@ -43,7 +43,7 @@ class CFG(object):
                 return states
             else:
                 eva_temp = [] #evaluaciones entre elementos del triangulo (Ej: q11 con q22)
-                combinacion = [] #combinaciones distrivutiva de los elementos de eva_temp
+                combinacion = [] #combinaciones distributiva de los elementos de eva_temp
                 #Buscar elementos para eva_temp
                 for i in states:
                     if(i[0][0]==columna or i[0][1]==elemento):
