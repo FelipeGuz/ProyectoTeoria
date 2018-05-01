@@ -20,10 +20,8 @@ class CFG(object):
                     lista = self.rules[(key)]
                     if(i in lista):
                         temp_rule.append(key)
-            print "Temp_rule: ",temp_rule
             dicc[contador+1,contador+1] = list(sorted(set(temp_rule)))
             states.append([[contador+1,contador+1],dicc[contador+1,contador+1]])
-            print "Diccionario: ",dicc
             contador+=1
 
         fila = 2
@@ -31,16 +29,17 @@ class CFG(object):
         columna = 1
         elemento = 2
         pre_states = []
-        pre_states+=states
-        print "---->ESTADOS: ",states
-        print "---------------------------------------------------------------------------------------------"
-        def filasM2(fila,columna,elemento,states,pre_states,word,rules):
-            print "Columna: ",columna
-            print "Elemento: ",elemento
-            if(elemento==len(word)+1):
-                print "---------------------------------------"
-                print "Pre_states: ",pre_states
-                return states
+        def filasM2(fila,columna,elemento,states,pre_states,word,rules,contador):
+            if (fila==len(word)+1):
+                longitud = len(states)-1
+                if(self.start in states[longitud][1]):
+                    return True
+                else:
+                    return False
+            elif(elemento==contador):
+                states+=pre_states
+                pre_states = []
+                return filasM2(fila+1,1,fila+1,states,pre_states,word,self.rules,contador)
             else:
                 eva_temp = [] #evaluaciones entre elementos del triangulo (Ej: q11 con q22)
                 combinacion = [] #combinaciones distributiva de los elementos de eva_temp
@@ -48,20 +47,33 @@ class CFG(object):
                 for i in states:
                     if(i[0][0]==columna or i[0][1]==elemento):
                         eva_temp+=[i[1]]
-                print "Eva_temp es: ",eva_temp
                 #Hacer las combinaciones
-                for i in eva_temp[0]:
-                    print i
-                    for u in eva_temp[1]:
-                        print u
-                        for node in rules:
-                            if((i+u) in rules.get(node) and not(node in combinacion)):
-                                combinacion.append(node)
-                print "Combinacion: ",combinacion
-                print combinacion
+                first = 0
+                second = len(eva_temp)-1
+                cont = 0
+                while(cont<(len(eva_temp)/2)):
+                    for i in eva_temp[first]:
+                        for u in eva_temp[second]:
+                            for node in rules:
+                                if((i+u) in rules.get(node) and not(node in combinacion)):
+                                    combinacion.append(node)
+                    if(len(eva_temp)<=2):
+                        break
+                    elif(first<second):
+##                        first+=1
+##                        second-=1
+                        temp = first
+                        first=second-1
+                        second=temp+1
+                        cont+=1
+                    else:
+                        temp=first
+                        first=second+1
+                        second=temp-1
+                        cont+=1
                 pre_states.append([[columna,elemento],combinacion])
-                filasM2(fila,columna+1,elemento+1,states,pre_states,word,self.rules)
-        filasM2(fila,columna,elemento,states,pre_states,word,self.rules)
+                return filasM2(fila,columna+1,elemento+1,states,pre_states,word,self.rules,contador)
+        return filasM2(fila,columna,elemento,states,pre_states,word,self.rules,contador+1)
                         
             
             
@@ -120,4 +132,101 @@ class CFG(object):
 ##
 ##        return True
 
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+
+    def test2(self,word):
+        contador = 0
+        states = []
+        dicc = {}
+        for i in word:
+            temp_rule = []
+            for key in self.rules.keys():
+                for eleState in self.rules[(key)]:
+                    lista = self.rules[(key)]
+                    if(i in lista):
+                        temp_rule.append(key)
+            print "Temp_rule: ",temp_rule
+            dicc[contador+1,contador+1] = list(sorted(set(temp_rule)))
+            states.append([[contador+1,contador+1],dicc[contador+1,contador+1]])
+            print "Diccionario: ",dicc
+            contador+=1
+
+        fila = 2
         
+        columna = 1
+        elemento = 2
+        pre_states = []
+        print "---->ESTADOS: ",states
+        print "---->CONTADOR: ",contador
+        print "---------------------------------------------------------------------------------------------"
+        def filasM2(fila,columna,elemento,states,pre_states,word,rules,contador):
+            print "---------------------------------------------------------------------------------------"
+            print "---------------------------------------------------------------------------------------"
+            print "-------------------------------------------CAMBIOS-------------------------------------"
+            print "---------------------------------------------------------------------------------------"
+            print "---------------------------------------------------------------------------------------"
+            print "Columna: ",columna
+            print "Elemento: ",elemento
+            if (fila==len(word)+1):
+                longitud = len(states)-1
+                if(self.start in states[longitud][1]):
+                    return True
+                else:
+                    return False
+            elif(elemento==contador):
+                print "---------------------------------------------------------------------------------------"
+                print "---------------------------------------------------------------------------------------"
+                print "Pre_states: ",pre_states
+                states+=pre_states
+                pre_states = []
+                return filasM2(fila+1,1,fila+1,states,pre_states,word,self.rules,contador)
+            else:
+                print "Ingresando a ELSE:"
+                eva_temp = [] #evaluaciones entre elementos del triangulo (Ej: q11 con q22)
+                combinacion = [] #combinaciones distributiva de los elementos de eva_temp
+                #Buscar elementos para eva_temp
+                for i in states:
+                    print "Elemento de los estados: ",i
+                    if(i[0][0]==columna or i[0][1]==elemento):
+                        print "Elemento que cumple: ",i[1]
+                        eva_temp+=[i[1]]
+                print "Eva_temp es: ",eva_temp
+                #Hacer las combinaciones
+                first = 0
+                second = len(eva_temp)-1
+                cont = 0
+                while(cont<(len(eva_temp)/2)):
+                    print "First: ",first
+                    print "Second: ",second
+                    for i in eva_temp[first]:
+                        print "-->",eva_temp[first]
+                        print "i: ",i
+                        for u in eva_temp[second]:
+                            print "-->",eva_temp[second]
+                            print "u: ",u
+                            for node in rules:
+                                print "Intento enlace: ",(i+u)
+                                if((i+u) in rules.get(node) and not(node in combinacion)):
+                                    print "-------------------->Enlace: %r con %r" %(i+u,node)
+                                    combinacion.append(node)
+                    if(len(eva_temp)<=2):
+                        break
+                    elif(first<second):
+##                        first+=1
+##                        second-=1
+                        temp = first
+                        first=second-1
+                        second=temp+1
+                        cont+=1
+                    else:
+                        temp=first
+                        first=second+1
+                        second=temp-1
+                        cont+=1
+
+                print "Combinacion: ",combinacion
+                pre_states.append([[columna,elemento],combinacion])
+                return filasM2(fila,columna+1,elemento+1,states,pre_states,word,self.rules,contador)
+        return filasM2(fila,columna,elemento,states,pre_states,word,self.rules,contador+1)
