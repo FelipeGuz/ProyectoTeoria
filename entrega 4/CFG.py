@@ -10,6 +10,7 @@ class CFG(object):
 
 
     def test(self,word):
+        #Construccion de la primera fila
         contador = 0
         states = []
         dicc = {}
@@ -24,39 +25,45 @@ class CFG(object):
             states.append([[contador+1,contador+1],dicc[contador+1,contador+1]])
             contador+=1
 
-        fila = 2
+        fila = 2 #Determina la fila en la que se encuentran
         
-        columna = 1
-        elemento = 2
-        pre_states = []
+        columna = 1 #Determina la columna en la que se encuentra
+        elemento = 2 #Determina el elemento que esta construllendo
+        pre_states = [] #Almacen la fila que se esta construyendo
+        #Construccion de las filas 
         def filasM2(fila,columna,elemento,states,pre_states,word,rules,contador):
+            #Si la variable fila es igual a la cantidad de letras de 'word' termina el programa
             if (fila==len(word)+1):
                 longitud = len(states)-1
                 if(self.start in states[longitud][1]):
                     return True
                 else:
                     return False
+            #Evalua si ya no hay mas elementos en la fila para ver si pasa a la siguiente
+            #La variable elemento representa cada elemento de la lista, cunando no hay mas pasa a la siguiente
             elif(elemento==contador):
                 states+=pre_states
                 pre_states = []
                 return filasM2(fila+1,1,fila+1,states,pre_states,word,self.rules,contador)
+            #Construccion de las filas 
             else:
                 eva_temp = [] #evaluaciones entre elementos del triangulo (Ej: q11 con q22)
                 combinacion = [] #combinaciones distributiva de los elementos de eva_temp
-                #Buscar elementos para eva_temp
+                #Buscar elementos para eva_temp, este busca todos los elementos cuyos subindices terminen en las columna y elemento correspondiente
                 for i in states:
                     if(i[0][0]==columna or i[0][1]==elemento):
                         eva_temp+=[i[1]]
-                #Hacer las combinaciones
-                first = 0
-                second = len(eva_temp)-1
-                cont = 0
+                #Hacer las combinaciones:
+                first = 0 #Representa los elementos no terminales que se van a combinar con otro
+                second = len(eva_temp)-1 #Represente los elementos no terminales que seran combinados
+                cont = 0 #Determina cuando debe terminar el while
                 while(cont<(len(eva_temp)/2)):
                     for i in eva_temp[first]:
                         for u in eva_temp[second]:
                             for node in rules:
                                 if((i+u) in rules.get(node) and not(node in combinacion)):
                                     combinacion.append(node)
+                    #Para el caso en el que eva_temp se conponga unicamnte de dos elementos
                     if(len(eva_temp)<=2):
                         break
                     elif(first<second):

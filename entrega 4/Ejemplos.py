@@ -17,7 +17,7 @@ rules1 = {
 }
 
 cfg1 = CFG(nonterminals1,terminals1,rules1,start1)
-#print cfg1.test('aba')
+print cfg1.test('bbb')
 
 nonterminals2 = ['S','A','B','C']
 terminals2 = ['a','b']
@@ -41,4 +41,4 @@ rules3 = {
     'C':['AB','b'],
 }
 cfg3 = CFG(nonterminals3,terminals3,rules3,start3)
-print cfg3.test('aaba')
+#print cfg3.test('aaba')
