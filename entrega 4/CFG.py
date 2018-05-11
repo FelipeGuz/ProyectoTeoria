@@ -90,6 +90,21 @@ class CFG(object):
             
             
         #return dicc
+        
+        def generateLenguage(self,b):
+            lista_total = []
+            lista_aceptada = []
+            for i in range(b+1):
+                a = list(itertools.product(self.terminals, repeat = i))
+                lista_total.append(a)
+            for i in lista_total:
+                for j in i:
+                    f = ""
+                    for k in j:
+                        f = f+k
+                        if self.test(f)==True and not(f in lista_aceptada):
+                            lista_aceptada.append(f)
+            return lista_aceptada
             
             
 
